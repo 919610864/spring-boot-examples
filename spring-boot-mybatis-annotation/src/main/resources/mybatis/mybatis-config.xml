@@ -16,8 +16,12 @@
 			</dataSource>
 		</environment>
 	</environments>
+	<!--<mappers>-->
+		<!--<mapper resource="mybatis/mapper/UserMapper.xml" />-->
+	<!--</mappers>-->
 	<mappers>
-		<mapper resource="mybatis/mapper/UserMapper.xml" />
+		<!-- 使用注解方式 -->
+		<mapper class="com.neo.mapper.UserMapper" />
+		<package name="com.neo.mapper"/>
 	</mappers>
-
 </configuration>
