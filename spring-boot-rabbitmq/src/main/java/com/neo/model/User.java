@@ -3,9 +3,11 @@ package com.neo.model;
 import java.io.Serializable;
 
 /**
- * Created by summer on 2016/11/29.
+ * 用户
  */
 public class User implements Serializable{
+
+    private static final long serialVersionUID = -2203590215208552218L;
 
     private String name;
 
@@ -24,6 +26,11 @@ public class User implements Serializable{
     }
 
     public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public User(String name, String pass) {
+        this.name = name;
         this.pass = pass;
     }
 
