@@ -1,4 +1,4 @@
-package com.neo.rabbit;
+package com.neo.rabbit.delay;
 
 import com.neo.config.RabbitConfig;
 import com.neo.model.Book;
