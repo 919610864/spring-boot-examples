@@ -19,11 +19,18 @@ public class UserDaoTest {
 
     @Test
     public void testSaveUser() throws Exception {
-        UserEntity user=new UserEntity();
-        user.setId(2l);
-        user.setUserName("小明");
-        user.setPassWord("fffooo123");
-        userDao.saveUser(user);
+        UserEntity user = null;
+        Long beginTime = System.currentTimeMillis();
+        for(int i=0;i<10000;i++){
+            user=new UserEntity();
+            user.setId(new Long(i));
+            user.setUserName("小明"+i);
+            user.setPassWord("密码"+i);
+            userDao.saveUser(user);
+        }
+        Long endTime = System.currentTimeMillis();
+        System.out.println("执行完毕,time:"+(endTime-beginTime));
+
     }
 
     @Test
