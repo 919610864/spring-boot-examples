@@ -60,7 +60,6 @@ public class CuratorWatcher {
 			 * <B>概要说明：</B>新建、修改、删除<BR>
 			 * @see org.apache.curator.framework.recipes.cache.PathChildrenCacheListener#childEvent(org.apache.curator.framework.CuratorFramework, org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent)
 			 */
-			@Override
 			public void childEvent(CuratorFramework cf, PathChildrenCacheEvent event) throws Exception {
 				switch (event.getType()) {
 				case CHILD_ADDED:

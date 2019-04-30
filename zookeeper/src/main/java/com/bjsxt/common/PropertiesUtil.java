@@ -17,7 +17,7 @@ public class PropertiesUtil {
         InputStream inputStream = PropertiesUtil.class.getResourceAsStream("/zookeeper.properties");
         InputStreamReader inputStreamReader = null;
         try {
-            inputStreamReader = new InputStreamReader(inputStream,"GBK");
+            inputStreamReader = new InputStreamReader(inputStream,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

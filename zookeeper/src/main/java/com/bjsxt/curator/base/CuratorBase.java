@@ -18,12 +18,13 @@ import org.apache.zookeeper.data.Stat;
 public class CuratorBase {
 	
 	/** zookeeper地址 */
-	static String CONNECT_ADDR ;
+	private static String CONNECT_ADDR;
 	/** session超时时间 */
 	static final int SESSION_OUTTIME = 5000;//ms
 
 	static {
 		CONNECT_ADDR = (String) PropertiesUtil.readPropery().get("zookeeper.url");
+		System.out.println(CONNECT_ADDR);
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -49,23 +50,20 @@ public class CuratorBase {
 		//5 删除节点
 		cf.delete().guaranteed().deletingChildrenIfNeeded().forPath("/super");
 		*/
-		
 		// 读取、修改
-		/**
+
 		//创建节点
 //		cf.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath("/super/c1","c1内容".getBytes());
 //		cf.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath("/super/c2","c2内容".getBytes());
-		//读取节点
+//		//读取节点
 //		String ret1 = new String(cf.getData().forPath("/super/c2"));
 //		System.out.println(ret1);
-		//修改节点
+//		//修改节点
 //		cf.setData().forPath("/super/c2", "修改c2内容".getBytes());
 //		String ret2 = new String(cf.getData().forPath("/super/c2"));
-//		System.out.println(ret2);	
-		*/
-		
+//		System.out.println(ret2);
+
 		// 绑定回调函数
-		/**
 		ExecutorService pool = Executors.newCachedThreadPool();
 		cf.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT)
 		.inBackground(new BackgroundCallback() {
@@ -77,10 +75,14 @@ public class CuratorBase {
 			}
 		}, pool)
 		.forPath("/super/c3","c3内容".getBytes());
-		Thread.sleep(Integer.MAX_VALUE);
-		*/
-		
-		
+		System.out.println(cf.getState());
+		Thread.sleep(2000);
+		pool.shutdown();
+		while (pool.isTerminated()){
+			System.out.println("in");
+			break;
+		}
+
 		// 读取子节点getChildren方法 和 判断节点是否存在checkExists方法
 		/**
 		List<String> list = cf.getChildren().forPath("/super");
@@ -97,6 +99,6 @@ public class CuratorBase {
 		
 		
 		//cf.delete().guaranteed().deletingChildrenIfNeeded().forPath("/super");
-		
+		cf.close();
 	}
 }
