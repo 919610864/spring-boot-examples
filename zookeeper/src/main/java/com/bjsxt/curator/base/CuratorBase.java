@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.bjsxt.common.PropertiesUtil;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -17,9 +18,13 @@ import org.apache.zookeeper.data.Stat;
 public class CuratorBase {
 	
 	/** zookeeper地址 */
-	static final String CONNECT_ADDR = "192.168.1.171:2181,192.168.1.172:2181,192.168.1.173:2181";
+	static String CONNECT_ADDR ;
 	/** session超时时间 */
-	static final int SESSION_OUTTIME = 5000;//ms 
+	static final int SESSION_OUTTIME = 5000;//ms
+
+	static {
+		CONNECT_ADDR = (String) PropertiesUtil.readPropery().get("zookeeper.url");
+	}
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -35,8 +40,7 @@ public class CuratorBase {
 		//3 开启连接
 		cf.start();
 		
-//		System.out.println(States.CONNECTED);
-//		System.out.println(cf.getState());
+		System.out.println(cf.getState());
 		
 		// 新加、删除
 		/**

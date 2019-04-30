@@ -1,9 +1,10 @@
-package bjsxt.curator.watcher;
+package com.bjsxt.curator.watcher;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.bjsxt.common.PropertiesUtil;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -18,12 +19,15 @@ import org.apache.zookeeper.data.Stat;
 public class CuratorWatcher1 {
 	
 	/** zookeeper地址 */
-	static final String CONNECT_ADDR = "192.168.1.171:2181,192.168.1.172:2181,192.168.1.173:2181";
+	static String CONNECT_ADDR ;
 	/** session超时时间 */
-	static final int SESSION_OUTTIME = 5000;//ms 
+	static final int SESSION_OUTTIME = 5000;//ms
+
+	static {
+		CONNECT_ADDR = (String) PropertiesUtil.readPropery().get("zookeeper.url");
+	}
 	
 	public static void main(String[] args) throws Exception {
-		
 		//1 重试策略：初试时间为1s 重试10次
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 10);
 		//2 通过工厂创建连接
