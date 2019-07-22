@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dockercompose-springboot-mysql-nginx/app/dockercompose-springboot-mysql-nginx.iml" filepath="$PROJECT_DIR$/dockercompose-springboot-mysql-nginx/app/dockercompose-springboot-mysql-nginx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-boot-mongodb/spring-boot-mongodb.iml" filepath="$PROJECT_DIR$/spring-boot-mongodb/spring-boot-mongodb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-boot-mybatis-annotation/spring-boot-mybatis-annotation.iml" filepath="$PROJECT_DIR$/spring-boot-mybatis-annotation/spring-boot-mybatis-annotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-boot-rabbitmq/spring-boot-rabbitmq.iml" filepath="$PROJECT_DIR$/spring-boot-rabbitmq/spring-boot-rabbitmq.iml" />
+    </modules>
+  </component>
+</project>
