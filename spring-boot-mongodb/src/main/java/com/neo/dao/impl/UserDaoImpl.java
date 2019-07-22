@@ -3,6 +3,8 @@ package com.neo.dao.impl;
 import com.mongodb.WriteResult;
 import com.neo.dao.UserDao;
 import com.neo.entity.UserEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -11,11 +13,15 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by summer on 2017/5/5.
  */
 @Component
 public class UserDaoImpl implements UserDao {
+
+    Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -26,7 +32,10 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void saveUser(UserEntity user) {
+        logger.info("saveUser request params:{}",user);
         mongoTemplate.save(user);
+
+
     }
 
     /**
@@ -36,7 +45,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public UserEntity findUserByUserName(String userName) {
-        Query query=new Query(Criteria.where("userName").is(userName));
+        Query query=new Query(Criteria.where("userName").regex(userName));
         UserEntity user =  mongoTemplate.findOne(query , UserEntity.class);
         return user;
     }
@@ -67,5 +76,19 @@ public class UserDaoImpl implements UserDao {
     public void deleteUserById(Long id) {
         Query query=new Query(Criteria.where("id").is(id));
         mongoTemplate.remove(query,UserEntity.class);
+    }
+
+    @Override
+    public List<UserEntity> findAll(Class<UserEntity> clazz, String col) {
+        List<?> list = mongoTemplate.findAll(clazz);
+        System.out.println(list);
+        return null;
+    }
+
+    @Override
+    public List findAll(Class<UserEntity> userEntityClass) {
+        List<UserEntity> list = mongoTemplate.findAll(userEntityClass);
+        System.out.println(list);
+        return null;
     }
 }
