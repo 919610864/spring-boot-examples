@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * 抽象服务
- * Created by xiexindong on 2017-08-23.
+ * Created by aa on 2017-08-23.
  */
 public abstract class AbstractService implements Service {
 

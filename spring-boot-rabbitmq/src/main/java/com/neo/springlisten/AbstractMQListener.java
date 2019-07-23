@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * 消息监听服务
  *
- * @author xiexindong
+ * @author aa
  * @date 2017-08-24
  */
 public abstract class AbstractMQListener extends AbstractService {

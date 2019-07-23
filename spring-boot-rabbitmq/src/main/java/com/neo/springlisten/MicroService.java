@@ -3,7 +3,7 @@ package com.neo.springlisten;
 import java.io.Serializable;
 
 /**
- * @author xiexindong
+ * @author aa
  */
 public class MicroService implements Serializable {
     private static final long serialVersionUID = -1513079165016L;

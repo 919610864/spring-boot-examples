@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 
 /**
  * 并行化任务工具类
- * Created by xiexindong on 2017-08-21.
+ * Created by aa on 2017-08-21.
  */
 public class Task {
 

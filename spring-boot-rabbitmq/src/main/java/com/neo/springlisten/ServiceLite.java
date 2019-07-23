@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 服务标记
- * Created by xiexindong on 2017-08-24.
+ * Created by aa on 2017-08-24.
  */
 @Documented
 @Target(ElementType.TYPE)
