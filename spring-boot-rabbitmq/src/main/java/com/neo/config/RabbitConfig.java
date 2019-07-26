@@ -122,7 +122,7 @@ public class RabbitConfig {
     /**
      * 延迟队列 TTL 名称
      */
-    private static final String REGISTER_DELAY_QUEUE = "dev.book.register.delay.queue";
+    public static final String REGISTER_DELAY_QUEUE = "dev.book.register.delay.queue";
     /**
      * DLX，dead letter发送到的 exchange
      * exchange 很重要,具体消息就是发送到该交换机的
