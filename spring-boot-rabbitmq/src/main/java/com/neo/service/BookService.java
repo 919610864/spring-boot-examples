@@ -9,4 +9,6 @@ package com.neo.service;
 public interface BookService {
 
     void sendDelayQueue();
+
+    void sendDelayQueue2(int delayTime);
 }
