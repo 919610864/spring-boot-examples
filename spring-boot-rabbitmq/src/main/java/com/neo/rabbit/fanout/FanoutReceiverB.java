@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-@RabbitListener(queues = "fanout.A")
-public class FanoutReceiverA {
+@RabbitListener(queues = "fanout.B")
+public class FanoutReceiverB {
 
     @Value("${server.port}")
     private String port;
 
     @RabbitHandler
     public void process(String obj, Channel channel, Message message) throws IOException {
-        System.out.println("fanout Receiver A  : " +"port:"+port+ message);
+        System.out.println("fanout Receiver B  : " +"port:"+port+ obj);
         try {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
         } catch (IOException e) {

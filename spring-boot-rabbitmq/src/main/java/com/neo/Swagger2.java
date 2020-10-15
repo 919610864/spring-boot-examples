@@ -50,4 +50,37 @@ public class Swagger2 {
 				.version("1.0").build();
 	}
 
+	@Bean
+	public Docket createRestApiDirect() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.enable(enableSwagger)
+				.groupName("direct").apiInfo(apiInfoDirect()).select()
+				.apis(RequestHandlerSelectors.basePackage(basePackage + ".direct"))
+				.paths(PathSelectors.any()).build();
+	}
+
+	private ApiInfo apiInfoDirect() {
+		return new ApiInfoBuilder().title("rabbit mq")
+				.description("Direct 模式")
+				.termsOfServiceUrl("")
+				.version("1.0").build();
+	}
+
+
+	@Bean
+	public Docket createRestApiFanout() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.enable(enableSwagger)
+				.groupName("fanout").apiInfo(apiInfoFanout()).select()
+				.apis(RequestHandlerSelectors.basePackage(basePackage + ".fanout"))
+				.paths(PathSelectors.any()).build();
+	}
+
+	private ApiInfo apiInfoFanout() {
+		return new ApiInfoBuilder().title("rabbit mq")
+				.description("Fanout 模式")
+				.termsOfServiceUrl("")
+				.version("1.0").build();
+	}
+
 }

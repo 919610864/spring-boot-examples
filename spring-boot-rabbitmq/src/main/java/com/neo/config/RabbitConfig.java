@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.neo.config.Constants.*;
+
 /**
  * @Author:mgd
  */
@@ -18,6 +20,7 @@ import java.util.Map;
 public class RabbitConfig {
 
     private static final Logger log = LoggerFactory.getLogger(RabbitConfig.class);
+
 
     @Bean
     public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory) {
@@ -47,6 +50,12 @@ public class RabbitConfig {
         return new Queue("fanout.A");
     }
 
+
+    @Bean
+    public Queue BMessage() {
+        return new Queue("fanout.B");
+    }
+
     @Bean
     FanoutExchange fanoutExchange() {
         return new FanoutExchange("fanoutExchange");
@@ -55,6 +64,11 @@ public class RabbitConfig {
     @Bean
     Binding bindingExchangeA(Queue AMessage, FanoutExchange fanoutExchange) {
         return BindingBuilder.bind(AMessage).to(fanoutExchange);
+    }
+
+    @Bean
+    Binding bindingExchangeB(Queue BMessage, FanoutExchange fanoutExchange) {
+        return BindingBuilder.bind(BMessage).to(fanoutExchange);
     }
     /************************************************fanout********************************************************/
 
@@ -176,6 +190,60 @@ public class RabbitConfig {
     public Binding dlxBinding() {
         return BindingBuilder.bind(delayProcessQueue()).to(delayExchange()).with(DELAY_ROUTING_KEY);
     }
+
+  /**  direct test  color ,**/
+    @Bean
+    public Queue orangeQueue(){
+        return new Queue(ORANGE_QUEUE_COLOUR);
+    }
+
+    @Bean
+    public Queue redQueue(){
+        return new Queue(RED_QUEUE_COLOUR,true,false,true);
+    }
+
+    @Bean
+    public DirectExchange colorExchange() {
+        return new DirectExchange(DIRECT_EXCHANGE);
+    }
+
+    @Bean
+    public Binding orangeBinding() {
+        return BindingBuilder.bind(orangeQueue()).to(colorExchange()).with(ORANGE_ROUTING);
+    }
+
+    @Bean
+    public Binding redBinding() {
+        return BindingBuilder.bind(redQueue()).to(colorExchange()).with(RED_ROUTING);
+    }
+
+    /**  direct test  color ,**/
+
+    /** topic test "<speed>.<colour>.<species>"  **/
+    @Bean
+    public TopicExchange rabbitExchange(){
+        return new TopicExchange(RABBIT_TOPIC_EXCHANGE);
+    }
+
+    @Bean
+    public Queue colorQueue(){
+        return new Queue(ORANGE_QUEUE);
+    }
+
+    @Bean
+    public Queue speedAndSpeciesQueue(){
+        return new Queue(SPEEDANDSPECIES_QUEUE);
+    }
+
+    @Bean
+    public Binding rabbitBinding() {
+        return BindingBuilder.bind(colorQueue()).to(rabbitExchange()).with("*.orange.*");
+    }
+
+
+
+
+    /** topic test "<speed>.<colour>.<species>"  **/
 
 
     @Bean
