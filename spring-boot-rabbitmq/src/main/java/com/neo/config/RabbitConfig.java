@@ -37,6 +37,7 @@ public class RabbitConfig {
 
     /**
      * queue with the default exchange
+     *
      * @return
      */
     @Bean
@@ -75,7 +76,7 @@ public class RabbitConfig {
 
     /********************************************** 完全匹配，单播的模式**********************************/
     @Bean
-    DirectExchange directExchange(){
+    DirectExchange directExchange() {
         return new DirectExchange("directExchange");
     }
 
@@ -85,6 +86,7 @@ public class RabbitConfig {
      * topic 交换器通过模式匹配分配消息的路由键属性，将路由键和某个模式进行匹配，此时队列需要绑定到一个模式上。
      * 它将路由键和绑定键的字符串切分成单词，这些单词之间用点隔开。
      * 它同样也会识别两个通配符：符号“#”和符号“”。#匹配0个或多个单词，匹配不多不少一个单词
+     *
      * @return
      */
 
@@ -119,9 +121,6 @@ public class RabbitConfig {
     /**************************************topic***************************************************/
 
 
-
-
-
     /**
      * rabbitTemplate.convertAndSend(createCustomerQueueName, requestWrapper);来自动序列化成json字符串了
      * @return
@@ -131,20 +130,21 @@ public class RabbitConfig {
 //        return new Jackson2JsonMessageConverter();
 //    }
 
-   /*******************************************************延时队列***************************************************************/
+    /*******************************************************延时队列***************************************************************/
 
     /**
-     * 延迟队列 TTL 名称
+     * //     * 延迟队列 TTL 名称
+     * //
      */
-    private static final String REGISTER_DELAY_QUEUE = "dev.book.register.delay.queue";
+    public static final String DELAY_QUEUE = "dev.book.register.delay.queue";
     /**
      * DLX，dead letter发送到的 exchange
      * exchange 很重要,具体消息就是发送到该交换机的
      */
-    public static final String REGISTER_DELAY_EXCHANGE = "dev.book.register.delay.exchange";
+    public static final String DELAY_EXCHANGE = "dev.book.register.delay.exchange";
     /**
      * routing key 名称
-     *  routingKey 很重要要,具体消息发送在该 routingKey 的
+     * routingKey 很重要要,具体消息发送在该 routingKey 的
      */
     public static final String DELAY_ROUTING_KEY = "";
 
@@ -153,25 +153,14 @@ public class RabbitConfig {
     public static final String REGISTER_EXCHANGE_NAME = "dev.book.register.exchange";
     public static final String ROUTING_KEY = "all";
 
-    /**
-     * 延迟队列配置
-     * <p>
-     * 1、params.put("x-message-ttl", 5 * 1000);
-     * TODO 第一种方式是直接设置 Queue 延迟时间 但如果直接给队列设置过期时间,这种做法不是很灵活,（当然二者是兼容的,默认是时间小的优先）
-     * 2、rabbitTemplate.convertAndSend(book, message -> {
-     * message.getMessageProperties().setExpiration(2 * 1000 + "");
-     * return message;
-     * });
-     * TODO 第二种就是每次发送消息动态设置延迟时间,这样我们可以灵活控制
-     **/
     @Bean
     public Queue delayProcessQueue() {
         Map<String, Object> params = new HashMap<>();
         // x-dead-letter-exchange 声明了队列里的死信转发到的DLX名称，
-        params.put("x-dead-letter-exchange", REGISTER_EXCHANGE_NAME);
+        params.put("x-dead-letter-exchange", DELAY_EXCHANGE);
         // x-dead-letter-routing-key 声明了这些死信在转发时携带的 routing-key 名称。
-        params.put("x-dead-letter-routing-key", ROUTING_KEY);
-        return new Queue(REGISTER_DELAY_QUEUE, true, false, false, params);
+        params.put("x-dead-letter-routing-key", DELAY_ROUTING_KEY);
+        return new Queue(DELAY_QUEUE, true, false, false, params);
     }
 
     /**
@@ -179,11 +168,11 @@ public class RabbitConfig {
      * 这是一个完整的匹配。如果一个队列绑定到该交换机上要求路由键 “dog”，则只有被标记为“dog”的消息才被转发，不会转发dog.puppy，也不会转发dog.guard，只会转发dog。
      * TODO 它不像 TopicExchange 那样可以使用通配符适配多个
      *
-     * @return DirectExchange
+     * @return TopicExchange
      */
     @Bean
-    public DirectExchange delayExchange() {
-        return new DirectExchange(REGISTER_DELAY_EXCHANGE);
+    public TopicExchange delayExchange() {
+        return new TopicExchange(DELAY_EXCHANGE);
     }
 
     @Bean
@@ -250,6 +239,7 @@ public class RabbitConfig {
     public Queue registerBookQueue() {
         return new Queue(REGISTER_QUEUE_NAME, true);
     }
+
     /**
      * 将路由键和某模式进行匹配。此时队列需要绑定要一个模式上。
      * 符号“#”匹配一个或多个词，符号“*”匹配不多不少一个词。因此“audit.#”能够匹配到“audit.irs.corporate”，但是“audit.*” 只会匹配到“audit.irs”。
@@ -264,5 +254,50 @@ public class RabbitConfig {
         return BindingBuilder.bind(registerBookQueue()).to(registerBookTopicExchange()).with(ROUTING_KEY);
     }
 
+
+    @Bean
+    public Queue immediateQueue() {
+        return new Queue("immediate_queue", true);
+    }
+
+    /**
+     * 延迟队列
+     *
+     * @return
+     */
+    @Bean
+    public Queue delayQueue() {
+        Map<String, Object> params = new HashMap<>();
+        // x-dead-letter-exchange 声明了队列里的死信转发到的DLX名称，
+        params.put("x-dead-letter-exchange", "immediate_exchange");
+        // x-dead-letter-routing-key 声明了这些死信在转发时携带的 routing-key 名称。
+        params.put("x-dead-letter-routing-key", "order");
+        return new Queue("delay_queue", true, false, false, params);
+
+    }
+
+    @Bean
+    public DirectExchange immediateExchange() {
+        return new DirectExchange("immediate_exchange", true, false);
+    }
+
+    @Bean
+    public DirectExchange deadLetterExchange() {
+        return new DirectExchange("dead_letter_exchange", true, false);
+    }
+
+    @Bean
+    public Binding immediateBinding() {
+        return BindingBuilder.bind(immediateQueue()).to(immediateExchange()).with("order");
+    }
+
+    @Bean
+    public Binding delayBinding() {
+        return BindingBuilder.bind(delayQueue()).to(deadLetterExchange()).with("order");
+    }
+
+
     /*******************************************************延时队列***************************************************************/
+
+
 }

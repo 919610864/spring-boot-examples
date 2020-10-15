@@ -19,21 +19,19 @@ import java.time.LocalDateTime;
  * @company GEGE
  */
 @Component
-public class BookReceiver {
+public class BookDelayQueueHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(BookReceiver.class);
+    private static final Logger log = LoggerFactory.getLogger(BookDelayQueueHandler.class);
 
-    @RabbitListener(queues = {RabbitConfig.REGISTER_QUEUE_NAME})
-    public void listenerDelayQueue(Book book, Message message, Channel channel) throws IOException {
+    @RabbitListener(queues = {RabbitConfig.DELAY_QUEUE})
+    public void listenerDelayQueue(Book book, Message message, Channel channel) {
         log.info("[listenerDelayQueue 监听的消息] - [消费时间] - [{}] - [{}]", LocalDateTime.now(), book.toString());
         try {
             // TODO 通知 MQ 消息已被成功消费,可以ACK了
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-            System.out.println("消费成功，通知MQ");
-        } catch (Exception e) {
+            System.out.println("延迟消费成功，通知MQ");
+        } catch (IOException e) {
             // TODO 如果报错了,那么我们可以进行容错处理,比如转移当前消息进入其它队列
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false,false);
-            System.out.println("receiver fail");
         }
     }
 
